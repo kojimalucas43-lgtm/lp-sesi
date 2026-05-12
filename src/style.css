@@ -1,5 +1,75 @@
+:root{
+    --text: #090909;
+    --bg: #000000;
+    --almond-cream: #ede0d4ff;
+    --pale-oak: #e6ccb2ff;
+    --tan: #ddb892ff;
+    --faded-copper: #b08968ff;
+    --coffee-bean: #7f5539ff;
+    --toffee-brown: #9c6644ff;
+    --font: "Sue Ellen Francisco", cursive;
+
+}
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+section{
+    min-height: 100vh;
+    height: auto;
+}
+body{
+    color: #ffffff;
+    background-color: rgb(0, 0, 0);
+    font-family: var(--font);
+    font-size: 30px;
+}
+
+nav{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    position: fixed;
+    background-color: #ffffff;
+    top: 0;
+    height: 100px;
+    z-index: 999;
+    animation: decima 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+
+@keyframes decima{
+    0%{
+        transform: translateY(-100px);
+    }
+    100%{
+        transform: translateY(0px);
+    }
+}
+
+nav span{
+    display: flex;
+    align-items: center;
+    padding: 8px 8px;
+    border-radius: 9999px;
+    transition: all 200ms ease-in-out;
+    gap: 5px;
+}
+
+nav span:hover{
+    transform: scale(1.05);
+}
+nav span a{
+    text-decoration: none;
+    color: #000000;
+}
+
+nav.sc{
+    background-color: #ffffff;
 }
