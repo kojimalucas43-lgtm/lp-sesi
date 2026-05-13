@@ -157,11 +157,24 @@ h2{
     }
 }
 
+#s5{
+    flex-direction: row;
+    align-items: center;
+}
+
 @media (width <= 1000px) {
     .navWords{
         display: none;
     }
     #s1{
         background-image: url('../assets/images/image.mb.jpg');
+        padding-top: 50px;
+    }
+    h1{
+        line-height: 120px;
+    }
+    h2{
+        margin-top: -20px;
+        font-size: 67px;
     }
 }
