@@ -4,6 +4,13 @@ window.addEventListener('scroll', ()=> {
     if(window.scrollY > 0){
         nav.classList.add('sc')
     }else{
-        na.classList.remove('sc')
+        nav.classList.remove('sc')
     }
 })
+
+function navTo(id){
+    document.getElementById(id).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    })
+}
