@@ -33,7 +33,7 @@ nav{
     gap: 5px;
     width: 100%;
     position: fixed;
-    background-color: #d40718;
+    background-color: transparent;
     top: 0;
     height: 100px;
     z-index: 999;
@@ -157,10 +157,6 @@ h2{
     }
 }
 
-#s5{
-    flex-direction: row;
-    align-items: center;
-}
 
 footer{
     display: flex;
@@ -182,12 +178,52 @@ footer.ft{
 footer a img{
     opacity: 0.7;
     transition: all 200ms linear;
+    border-radius: 25%;
 }
 
 footer a img:hover{
     opacity: 1;
     box-shadow: 0px 3px 10px #090909;
     transform: translateY(-5px) scale(1.1) rotate(360deg);
+}
+
+.vid{
+    width: 720px;
+    height: 450px;
+}
+
+#s2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 50px;
+    min-height: 70vh;
+}
+
+#s3{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    
+.card{
+    width: 300px;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transform: rotateY(200px);
+    transition: opacity 0.6s ease, trasform 0.6s ease;
+    background-color: #df0808;
+    border-radius: 10%;
+}
+
+.card.visible{
+    opacity: 1;
+    transform: rotateY(0);
 }
 
 @media (width <= 1000px) {
