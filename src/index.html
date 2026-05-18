@@ -7,34 +7,62 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sue+Ellen+Francisco&display=swap" rel="stylesheet">
+ 
+    <style>
+        /* ── Bola de basquete na seção Home ── */
+        #basketball-container {
+            width: 100%;
+            height: 420px;
+            cursor: grab;
+            display: block;
+        }
+        #basketball-container:active {
+            cursor: grabbing;
+        }
+        #bk-label {
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            opacity: 0.35;
+            margin-top: -12px;
+            margin-bottom: 12px;
+            pointer-events: none;
+            user-select: none;
+        }
+    </style>
 </head>
 <body>
     <nav>
         <span class="navItems" onclick="navTo('s1')">
             <img src="../assets/icons/home.png" alt="Home" width="30px">
-            <a class="navWords" >Home</a>
+            <a class="navWords">Home</a>
         </span>
         <span class="navItems" onclick="navTo('s2')">
             <img src="../assets/icons/cat.png" alt="Produtos" width="30px">
-            <a class="navWords" >Produtos</a>
+            <a class="navWords">Produtos</a>
         </span>
         <span class="navItems" onclick="navTo('s3')">
             <img src="../assets/icons/video.png" alt="Vídeo" width="30px">
-            <a class="navWords" >Video</a>
+            <a class="navWords">Video</a>
         </span>
         <span class="navItems" onclick="navTo('s4')">
             <img src="../assets/icons/contact.png" alt="Contato" width="30px">
-            <a class="navWords" >Contato</a>
+            <a class="navWords">Contato</a>
         </span>
     </nav>
-
+ 
     <main>
         <section id="s1">
             <h1>Home</h1>
-            <h2>Alguma coisa po </h2>
+            <h2>Alguma coisa po</h2>
+ 
+            <!-- Bola de basquete 3D interativa -->
+            <div id="basketball-container"></div>
+            <p id="bk-label">arraste para girar</p>
         </section>
-
-         <section id="s2">
+ 
+        <section id="s2">
             <div class="card">
                 <img src="../assets/images/Kd.png" width="300px" height="300px" alt="kd">
                 <div>
@@ -56,32 +84,361 @@
                     <p></p>
                 </div>
             </div>
-            
-            </section>
-            
-         <section id="s3">
+        </section>
+ 
+        <section id="s3">
             <iframe class="vid" src="https://www.youtube.com/embed/I99mL8Y-lF4?si=Bek4pHaKOMWno4y3" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </section>
-
+ 
         <section id="s4">
-            
+            <h3>CONTATO</h3>
+            <div class="formulario">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" placeholder="Digite seu nome">
+                <label for="assunto">Mensagem:</label>
+                <textarea id="assunto" placeholder="Digite uma mensagem"></textarea>
+                <button onclick="enviar()">ENVIAR</button>
+            </div>
         </section>
-        
     </main>
-    
+ 
     <footer>
         <a href="https://www.facebook.com/" target="_blank">
-            <img width="40px" src="../assets/icons/facebook.png" alt='facebook'>
+            <img width="40px" src="../assets/icons/facebook.png" alt="facebook">
         </a>
         <a href="https://www.instagram.com/" target="_blank">
-            <img width="40px" src="../assets/icons/instagram.jpg" alt='instagram'>
+            <img width="40px" src="../assets/icons/instagram.jpg" alt="instagram">
         </a>
         <a href="https://www.linkedin.com/" target="_blank">
-            <img width="40px" src="../assets/icons/linkedin.png" alt='linkedin'>
+            <img width="40px" src="../assets/icons/linkedin.png" alt="linkedin">
         </a>
-
     </footer>
-
+ 
     <script src="script.js"></script>
+ 
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+ 
+    <!-- Bola de basquete 3D -->
+    <script>
+        const container = document.getElementById('basketball-container');
+        const W = container.clientWidth;
+        const H = container.clientHeight;
+ 
+        /* Renderer — alpha:true = fundo transparente (herda cor do site) */
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(W, H);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setClearColor(0x000000, 0);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+ 
+        const scene = new THREE.Scene();
+ 
+        const camera = new THREE.PerspectiveCamera(42, W / H, 0.1, 1000);
+        camera.position.set(0, 2, 22);
+        camera.lookAt(0, 0, 0);
+ 
+        /* Luzes */
+        scene.add(new THREE.AmbientLight(0xffeedd, 0.35));
+ 
+        const keyLight = new THREE.DirectionalLight(0xfff3e0, 2.4);
+        keyLight.position.set(25, 30, 18);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 2048;
+        keyLight.shadow.mapSize.height = 2048;
+        keyLight.shadow.camera.near = 0.5;
+        keyLight.shadow.camera.far = 120;
+        keyLight.shadow.camera.left = -20;
+        keyLight.shadow.camera.right = 20;
+        keyLight.shadow.camera.top = 20;
+        keyLight.shadow.camera.bottom = -20;
+        scene.add(keyLight);
+ 
+        const rimLight = new THREE.DirectionalLight(0xff8833, 0.8);
+        rimLight.position.set(-20, 5, -15);
+        scene.add(rimLight);
+ 
+        const fillLight = new THREE.DirectionalLight(0xffeedd, 0.4);
+        fillLight.position.set(5, -10, 12);
+        scene.add(fillLight);
+ 
+        /* Partículas de fundo */
+        const dustVerts = [];
+        for (let i = 0; i < 1200; i++) {
+            dustVerts.push(
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500
+            );
+        }
+        const dustGeo = new THREE.BufferGeometry();
+        dustGeo.setAttribute('position', new THREE.Float32BufferAttribute(dustVerts, 3));
+        scene.add(new THREE.Points(dustGeo, new THREE.PointsMaterial({
+            color: 0xffaa44,
+            size: 0.35,
+            transparent: true,
+            opacity: 0.18
+        })));
+ 
+        /* ── Textura da bola de basquete via Canvas ── */
+        const texW = 2048, texH = 1024;
+        const texCanvas = document.createElement('canvas');
+        texCanvas.width = texW; texCanvas.height = texH;
+        const ctx = texCanvas.getContext('2d');
+ 
+        const baseGrad = ctx.createRadialGradient(texW*0.35, texH*0.35, 0, texW*0.5, texH*0.5, texW*0.65);
+        baseGrad.addColorStop(0.0, '#E8620A');
+        baseGrad.addColorStop(0.5, '#C84E00');
+        baseGrad.addColorStop(1.0, '#9E3800');
+        ctx.fillStyle = baseGrad;
+        ctx.fillRect(0, 0, texW, texH);
+ 
+        for (let i = 0; i < 55000; i++) {
+            const x = Math.random() * texW;
+            const y = Math.random() * texH;
+            const r = Math.random() * 2.2 + 0.4;
+            const bright = Math.random();
+            let alpha, red, grn;
+            if (bright > 0.65) {
+                red = 230 + Math.floor(Math.random() * 25);
+                grn = Math.floor(Math.random() * 50 + 60);
+                alpha = Math.random() * 0.22 + 0.05;
+            } else {
+                red = 80 + Math.floor(Math.random() * 40);
+                grn = Math.floor(Math.random() * 30);
+                alpha = Math.random() * 0.28 + 0.05;
+            }
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${red},${grn},0,${alpha})`;
+            ctx.fill();
+        }
+ 
+        for (let i = 0; i < 400; i++) {
+            const x = Math.random() * texW;
+            const y = Math.random() * texH;
+            const len = Math.random() * 18 + 3;
+            const ang = Math.random() * Math.PI;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + Math.cos(ang) * len, y + Math.sin(ang) * len);
+            ctx.strokeStyle = `rgba(60,15,0,${Math.random() * 0.15 + 0.05})`;
+            ctx.lineWidth = Math.random() * 0.8 + 0.2;
+            ctx.stroke();
+        }
+ 
+        function seamLine(path, lineW, color) {
+            ctx.save();
+            ctx.strokeStyle = color;
+            ctx.lineWidth = lineW;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            path();
+            ctx.stroke();
+            ctx.restore();
+        }
+ 
+        function cubicBezier(p0, p1, p2, p3, t) {
+            const u = 1 - t;
+            return u*u*u*p0 + 3*u*u*t*p1 + 3*u*t*t*p2 + t*t*t*p3;
+        }
+        function cubicBezierDeriv(p0, p1, p2, p3, t) {
+            const u = 1 - t;
+            return 3*(u*u*(p1-p0) + 2*u*t*(p2-p1) + t*t*(p3-p2));
+        }
+ 
+        function drawSSeam(centerX, flip) {
+            const f = flip ? -1 : 1;
+            seamLine(() => {
+                ctx.moveTo(centerX + f * 2, 0);
+                ctx.bezierCurveTo(centerX + f * 2 + f * 120, texH * 0.25, centerX + f * 2 - f * 120, texH * 0.75, centerX + f * 2, texH);
+            }, 28, 'rgba(30,8,0,0.55)');
+            seamLine(() => {
+                ctx.moveTo(centerX, 0);
+                ctx.bezierCurveTo(centerX + f * 120, texH * 0.25, centerX - f * 120, texH * 0.75, centerX, texH);
+            }, 16, '#1a0a00');
+            seamLine(() => {
+                ctx.moveTo(centerX - f * 1, 0);
+                ctx.bezierCurveTo(centerX - f * 1 + f * 120, texH * 0.25, centerX - f * 1 - f * 120, texH * 0.75, centerX - f * 1, texH);
+            }, 3, 'rgba(200,90,0,0.4)');
+            const totalPts = 60;
+            for (let i = 0; i <= totalPts; i++) {
+                const t = i / totalPts;
+                const bx = cubicBezier(centerX, centerX + f * 120, centerX - f * 120, centerX, t);
+                const by = cubicBezier(0, texH * 0.25, texH * 0.75, texH, t);
+                const nx = -f * (cubicBezierDeriv(centerX, centerX + f * 120, centerX - f * 120, centerX, t));
+                const ny = cubicBezierDeriv(0, texH * 0.25, texH * 0.75, texH, t);
+                const len = Math.sqrt(nx * nx + ny * ny) || 1;
+                const px = -ny / len * 10;
+                const py = nx / len * 10;
+                for (let s of [-1, 1]) {
+                    ctx.beginPath();
+                    ctx.arc(bx + px * s * 0.5, by + py * s * 0.5, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(80,20,0,0.7)';
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(bx + px * s * 0.5 - 1, by + py * s * 0.5 - 1, 1.2, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(220,100,30,0.35)';
+                    ctx.fill();
+                }
+            }
+        }
+ 
+        function drawHorizSeam() {
+            const cy = texH / 2;
+            seamLine(() => { ctx.moveTo(0, cy + 2); ctx.lineTo(texW, cy + 2); }, 28, 'rgba(30,8,0,0.55)');
+            seamLine(() => { ctx.moveTo(0, cy); ctx.lineTo(texW, cy); }, 16, '#1a0a00');
+            seamLine(() => { ctx.moveTo(0, cy - 2); ctx.lineTo(texW, cy - 2); }, 3, 'rgba(200,90,0,0.35)');
+            for (let x = 0; x <= texW; x += texW / 55) {
+                for (let s of [-1, 1]) {
+                    ctx.beginPath();
+                    ctx.arc(x, cy + s * 10, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(80,20,0,0.7)';
+                    ctx.fill();
+                }
+            }
+        }
+ 
+        function drawVertSeam() {
+            const cx = texW / 2;
+            seamLine(() => { ctx.moveTo(cx + 2, 0); ctx.lineTo(cx + 2, texH); }, 28, 'rgba(30,8,0,0.55)');
+            seamLine(() => { ctx.moveTo(cx, 0); ctx.lineTo(cx, texH); }, 16, '#1a0a00');
+            seamLine(() => { ctx.moveTo(cx - 2, 0); ctx.lineTo(cx - 2, texH); }, 3, 'rgba(200,90,0,0.35)');
+            for (let y = 0; y <= texH; y += texH / 30) {
+                for (let s of [-1, 1]) {
+                    ctx.beginPath();
+                    ctx.arc(cx + s * 10, y, 2.5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(80,20,0,0.7)';
+                    ctx.fill();
+                }
+            }
+        }
+ 
+        drawHorizSeam();
+        drawVertSeam();
+        drawSSeam(texW * 0.25, false);
+        drawSSeam(texW * 0.75, true);
+ 
+        const specGrad = ctx.createRadialGradient(texW * 0.32, texH * 0.28, 0, texW * 0.32, texH * 0.28, texW * 0.28);
+        specGrad.addColorStop(0.0, 'rgba(255,200,120,0.18)');
+        specGrad.addColorStop(0.4, 'rgba(255,150,60,0.06)');
+        specGrad.addColorStop(1.0, 'rgba(0,0,0,0)');
+        ctx.fillStyle = specGrad;
+        ctx.fillRect(0, 0, texW, texH);
+ 
+        const basketballTex = new THREE.CanvasTexture(texCanvas);
+        basketballTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+ 
+        const normCanvas = document.createElement('canvas');
+        normCanvas.width = 512; normCanvas.height = 256;
+        const nCtx = normCanvas.getContext('2d');
+        nCtx.fillStyle = '#8080ff';
+        nCtx.fillRect(0, 0, 512, 256);
+        for (let i = 0; i < 12000; i++) {
+            const nx = Math.random() * 512;
+            const ny = Math.random() * 256;
+            const nr = Math.random() * 2 + 0.5;
+            nCtx.beginPath();
+            nCtx.arc(nx, ny, nr, 0, Math.PI * 2);
+            const dx = Math.floor(Math.random() * 40 - 20 + 128);
+            const dy = Math.floor(Math.random() * 40 - 20 + 128);
+            nCtx.fillStyle = `rgb(${dx},${dy},200)`;
+            nCtx.fill();
+        }
+        const normalTex = new THREE.CanvasTexture(normCanvas);
+ 
+        /* Bola */
+        const ball = new THREE.Mesh(
+            new THREE.SphereGeometry(6, 128, 128),
+            new THREE.MeshStandardMaterial({
+                map: basketballTex,
+                normalMap: normalTex,
+                normalScale: new THREE.Vector2(0.6, 0.6),
+                roughness: 0.82,
+                metalness: 0.02
+            })
+        );
+        ball.castShadow = true;
+        scene.add(ball);
+ 
+        /* Sombra no chão */
+        const shadowMesh = new THREE.Mesh(
+            new THREE.CircleGeometry(5.5, 64),
+            new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.25, depthWrite: false })
+        );
+        shadowMesh.rotation.x = -Math.PI / 2;
+        shadowMesh.position.set(0, -8.5, 0);
+        scene.add(shadowMesh);
+ 
+        /* ── Controle de rotação pelo mouse e touch ── */
+        let isDragging = false;
+        let prevX = 0, prevY = 0;
+        let rotX = 0, rotY = 0;
+        let velX = 0, velY = 0;
+ 
+        container.addEventListener('mousedown', e => {
+            isDragging = true;
+            prevX = e.clientX; prevY = e.clientY;
+            velX = 0; velY = 0;
+        });
+        window.addEventListener('mouseup', () => { isDragging = false; });
+        window.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            const dx = e.clientX - prevX;
+            const dy = e.clientY - prevY;
+            velX = dx * 0.006; velY = dy * 0.004;
+            rotY += velX; rotX += velY;
+            prevX = e.clientX; prevY = e.clientY;
+        });
+ 
+        container.addEventListener('touchstart', e => {
+            isDragging = true;
+            prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+            velX = 0; velY = 0;
+        }, { passive: true });
+        container.addEventListener('touchend', () => { isDragging = false; });
+        container.addEventListener('touchmove', e => {
+            if (!isDragging) return;
+            const dx = e.touches[0].clientX - prevX;
+            const dy = e.touches[0].clientY - prevY;
+            velX = dx * 0.006; velY = dy * 0.004;
+            rotY += velX; rotX += velY;
+            prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+        }, { passive: true });
+ 
+        /* Loop de animação */
+        let t = 0;
+        function animar() {
+            requestAnimationFrame(animar);
+            t += 0.004;
+ 
+            if (!isDragging) {
+                velX *= 0.94; velY *= 0.94;
+                rotY += velX; rotX += velY;
+                rotY += 0.003;
+            }
+ 
+            rotX = Math.max(-0.8, Math.min(0.8, rotX));
+            ball.rotation.y = rotY;
+            ball.rotation.x = rotX;
+            shadowMesh.position.x = Math.sin(rotY) * 0.5;
+ 
+            renderer.render(scene, camera);
+        }
+        animar();
+ 
+        /* Responsivo */
+        window.addEventListener('resize', () => {
+            const nW = container.clientWidth;
+            const nH = container.clientHeight;
+            camera.aspect = nW / nH;
+            camera.updateProjectionMatrix();
+            renderer.setSize(nW, nH);
+        });
+    </script>
 </body>
 </html>
+ 

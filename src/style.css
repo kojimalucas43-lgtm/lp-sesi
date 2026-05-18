@@ -77,7 +77,7 @@ nav.sc{
     justify-content: center;
     gap: 10px;
     background-color: #ffffff;
-    padding: 10px;
+    padding: 5px;
     border-radius: 9999px;
 }
 
@@ -224,6 +224,89 @@ footer a img:hover{
 .card.visible{
     opacity: 1;
     transform: rotateY(0);
+}
+
+#s4{
+    min-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding-top: -8vh;
+}
+
+.formulario{
+    width: 300px;
+    height: auto;
+    padding: 20px;
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    border: 2px solid #7e0515 ;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px #090909;
+    margin-bottom: 20px;
+}
+
+.formulario label{
+    width: 100%;
+    padding: 20px;
+    margin-bottom: -35px;
+    font-size: 22px;
+}
+
+.formulario input{
+    width: 100%;
+    padding: 10px;
+    border: 2px solid var(--almond-cream);
+    background-color: transparent;
+    color: var(--almond-cream);
+    border-radius: 999px;
+    font-size: 22px;
+    box-shadow: 0px 3px 10px #090909;
+}
+
+input::placeholder{
+    font-family: var(--font);
+}
+
+textarea::placeholder{
+    font-family: var(--font);
+}
+
+.formulario textarea{
+    max-width: 100%;
+    width: 255px;
+    min-width: 255px;
+    padding: 10px;
+    border: 2px solid var(--almond-cream);
+    background-color: transparent;
+    color: var(--almond-cream);
+    box-shadow: 0px 3px 10px #090909;
+}
+
+.formulario button{
+    width: 100%;
+    padding: 10px;
+    background-color: var(--almond-cream);
+    color: #090909;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-size: 600;
+    transition: all 200ms ease-in-out;
+}
+
+.formulario button:hover{
+    cursor: pointer;
+    box-shadow: 0px 3px 10px #090909;
+    background-color: transparent;
+    color: var(--almond-cream);
+    border: 2px solid var(--almond-cream);
 }
 
 @media (width <= 1000px) {
